@@ -44,9 +44,9 @@ public class HomeController {
         cache.put("userInfoEndpointUri",issuer+"v1/userinfo");
         cache.put("jwkSetUri",issuer+"v1/keys");
         cache.put("clientId","0oac6ipptuwgWhYOF5d7");
-        cache.put("scope","openid profile email");
+        cache.put("scope","openid profile email phone");
         cache.put("responseType","code");
-        cache.put("redirectUri","http://localhost:8080/authorization-code/callback");
+        cache.put("redirectUri","http://localhost:8080/oktaCallback");
         cache.put("secret","FHJonCpuVuIHMBWp0Va-ngIKlvUAcissA0NiRZ-CXqZoJZAaqkjwwDhGYNwchZ6J");
     }
 
@@ -85,7 +85,8 @@ public class HomeController {
         }
         return "loginOkta";
     }
-    @GetMapping("/authorization-code/callback")
+    @SneakyThrows
+    @GetMapping("/oktaCallback")
     public String callback(String code,String state, HttpServletRequest request, HttpServletResponse response) {
         Assert.equals(state,cache.get("state"));
         //根据json值填充ClientRegistration对象，使用builder方法
@@ -94,11 +95,12 @@ public class HomeController {
                 .clientSecret(cache.get("secret"))
                 .clientAuthenticationMethod(ClientAuthenticationMethod.BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .redirectUriTemplate("{baseUrl}/authorization-code/callback")
+                .redirectUriTemplate("{baseUrl}/oktaCallback")
+
                 .scope(cache.get("scope").split(" "))
                 .authorizationUri(cache.get("authorizationUri"))
                 .tokenUri(cache.get("tokenUri"))
-                .userInfoUri(cache.get("userInfoUri"))
+                .userInfoUri(cache.get("userInfoEndpointUri"))
                 .userNameAttributeName("sub")
                 .userInfoAuthenticationMethod(AuthenticationMethod.HEADER)
                 .jwkSetUri(cache.get("jwkSetUri"))

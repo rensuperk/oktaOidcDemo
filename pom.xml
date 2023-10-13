@@ -38,6 +38,16 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-jose</artifactId>
         </dependency>
+        <dependencies>
+        <dependency>
+            <groupId>org.apache.directory.scimple</groupId>
+            <artifactId>scim-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.directory.scimple</groupId>
+            <artifactId>scim-server</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
